@@ -10,15 +10,13 @@ k.loadSprite("wall","./src/sprites/world/wall.png")
 k.loadSprite("hello","./src/sprites/world/longwall.png")
 k.loadSprite("vWall","./src/sprites/world/vWall.png")
 k.loadSound("hit","./src/components/sounds/hit.wav")
+k.loadSound("levelOneMusic","./src/components/sounds/level1music.mp3")
 
-export default function level1() {
+export default function level1(name) {
 	const {
 		add,
 		pos,
-		rect,
 		color,
-		origin,
-		overlaps,
 		destroy,
 		camShake,
 		go,
@@ -30,15 +28,17 @@ export default function level1() {
 		vec2,
 		rand,
 		solid,
-		resolve,
-		every,
 		layers,
 		layer,
-		debug,
 		rgba,
 	} = k
 
+	
+
 	let d = "up"
+
+	const music = play("levelOneMusic")
+	music.play()
 	const player = add([
 		sprite("hades"),
 		pos(200, 200),
@@ -56,12 +56,13 @@ export default function level1() {
 
 	var score = 0
 	var hp = player.hp()
+	let wave = 10
 
 	const scoreCount = add([
 		text(`${score}`),
 		pos(50,60),
 		color(rgba(1,1,1)),
-		scale(4),
+		scale(2),
 		layer("ui"),
 		"score"
 	]);
@@ -69,9 +70,17 @@ export default function level1() {
 		text(`${hp}`),
 		pos(50,100),
 		color(rgba(1,0,0.3)),
-		scale(4),
+		scale(2),
 		layer("ui"),
 		"score"
+	]);
+	const waveCount = add([
+		text(`Wave :${wave}`,8),
+		pos(275,50),
+		color(rgba(1,0,0.3)),
+		scale(2),
+		layer("ui"),
+		"wave"
 	]);
 
 	function health(hp) {
@@ -99,6 +108,10 @@ export default function level1() {
 	function updateHP(){
 		hp--
 		healthCount.use(text(`${hp}`))
+	}
+	function updateWave(){
+		wave--
+		waveCount.use(text(`Wave :${wave}`,8))
 	}
 
 	function loadMap(){
@@ -284,11 +297,20 @@ export default function level1() {
 	player.action(()=>{
 		player.resolve()
 	})
-	debug.objCount()
+	
 	loadMap()
-	k.loop(5, () => {
+	
+	var refreshId = 
+		setInterval(function() {
+		
 		createEnemy()
 		createEnemy2()
 		createEnemy3()
-	})
+		updateWave()
+		if (wave < 0) {
+		  clearInterval(refreshId);
+		}
+	  }, 5000);
+	
+	  
 }
