@@ -12,8 +12,8 @@ k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
 k.loadSound("levelOneMusic", "./src/components/sounds/level1music.mp3")
 
-export default function level1(name) {
-	return (name)=>{
+export default function levelTwo(info) {
+	return (info)=>{
 		const {
 			add,
 			pos,
@@ -32,10 +32,7 @@ export default function level1(name) {
 			layers,
 			layer,
 			rgba,
-			get,
 		} = k
-	
-	
 	
 		let d = "up"
 	
@@ -48,7 +45,7 @@ export default function level1(name) {
 			sprite("hades"),
 			pos(200, 200),
 			scale(2),
-			health(10),
+			health(info.theHp),
 			solid(),
 			"hades"
 		])
@@ -59,9 +56,10 @@ export default function level1(name) {
 			"game",
 		], "game");
 	
-		var score = 0
+		
+		var score = info.theScore
 		var hp = player.hp()
-		let wave = 10
+		let wave = 20
 	
 		const scoreCount = add([
 			text(`${score}`),
@@ -87,14 +85,7 @@ export default function level1(name) {
 			layer("ui"),
 			"wave"
 		]);
-		function spawnDoor() {
-			let door = add([
-				sprite("bullet"),
-				pos(400, 400),
-				scale(2),
-				"door",
-			])
-		}
+	
 		function health(hp) {
 			// these functions will directly assign to the game object
 			return {
@@ -154,6 +145,14 @@ export default function level1(name) {
 				pos(0, 7)
 			])
 		}
+		function spawnDoor() {
+			let door = add([
+				sprite("bullet"),
+				pos(400, 400),
+				scale(2),
+				"door",
+			])
+		}
 		function createEnemy() {
 			let enmy = [
 				sprite("enemy"),
@@ -161,7 +160,7 @@ export default function level1(name) {
 				scale(3),
 				"enemy",
 				"reset",
-				health(2),
+				health(4),
 				solid(),
 			]
 			add(enmy)
@@ -174,7 +173,7 @@ export default function level1(name) {
 				scale(2),
 				"enemy2",
 				"reset",
-				health(1),
+				health(2),
 				solid(),
 			]
 			add(enmy2)
@@ -187,7 +186,7 @@ export default function level1(name) {
 				scale(2),
 				"enemy3",
 				"reset",
-				health(1),
+				health(2),
 				solid(),
 			]
 			add(enmy3)
@@ -244,12 +243,11 @@ export default function level1(name) {
 	
 		k.keyPress("enter", () => {
 			music.pause()
-			spawnEnemies.stop()
-			go("level2", {
+			go("bossFight", ({
 				theScore: score,
 				theHp: hp,
-				theName: name
-			});
+				theName: info.theName
+			}));
 		});
 	
 		k.action("bullet", (r) => {
@@ -295,20 +293,13 @@ export default function level1(name) {
 				})
 			e.resolve()
 		})
-		k.action("reset",(r)=>{
-			if (r.pos.x > 790 || r.pos.x < 0 || r.pos.y > 790 || r.pos.y < 0){
-				destroy(r)
-				console.log("destryoed");
-			}
-		})
 		k.collides("door", "hades", () => {
 			music.pause()
-			spawnEnemies.stop()
-			go("level2", {
+			go("bossFight", ({
 				theScore: score,
 				theHp: hp,
-				theName: name
-			});
+				theName: info.name
+			}));
 		})
 		k.collides("reset", "hades", (e, h) => {
 			camShake(12)
@@ -337,30 +328,27 @@ export default function level1(name) {
 		player.action(() => {
 			player.resolve()
 		})
-
+	
 		loadMap()
-		var spawnEnemies =
-				k.loop(5,()=>{
-					if (wave < 9) {
-						k.loop(2,()=>{
-							var arr = get("reset")
-							if(arr.length == 0){
-							spawnDoor()
-							}
-						})
-						spawnEnemies.stop()
-							
-					} else {
-					createEnemy()
-					createEnemy2()
-					createEnemy3()
-					updateWave()
-					}
-				})
-
+	
+		var refreshId =
+			setInterval(function () {
+				console.log("level2");
+				createEnemy()
+				createEnemy2()
+				createEnemy3()
+				updateWave()
+				if (wave <= 0) {
+					clearInterval(refreshId);
+					
+					wait(6, () => {
+						spawnDoor()
+					})
+				}
+			}, 4000);
+	
 	}
+	}
+
 	
 
-
-
-}

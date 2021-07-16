@@ -7,6 +7,7 @@ export const k = kaboom({
     fullscreen:false,
     canvas:document.getElementById("canvas"),
     clearColor: [0, 0, 0, 1],
+    debug: true
 });
 
 export default k
