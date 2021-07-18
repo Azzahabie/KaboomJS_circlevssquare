@@ -10,10 +10,12 @@ k.loadSprite("wall", "./src/sprites/world/wall.png")
 k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
-k.loadSound("levelOneMusic", "./src/components/sounds/level1music.mp3")
-
+k.loadSound("levelTwoMusic", "./src/components/sounds/level2.mp3")
+export const stopMusic = ()=>{
+	console.log("owkrs");
+}
 export default function levelTwo(info) {
-	return (info)=>{
+	return (info) => {
 		const {
 			add,
 			pos,
@@ -32,12 +34,13 @@ export default function levelTwo(info) {
 			layers,
 			layer,
 			rgba,
+			get
 		} = k
-	
+
 		let d = "up"
-	
-		const music = play("levelOneMusic", {
-			volume: 0.4,
+
+		const music = play("levelTwoMusic", {
+			volume: 0.6,
 			detune: -100
 		})
 		music.play()
@@ -49,18 +52,18 @@ export default function levelTwo(info) {
 			solid(),
 			"hades"
 		])
-	
+
 		layers([
 			"bg",
 			"ui",
 			"game",
 		], "game");
-	
-		
+
+
 		var score = info.theScore
 		var hp = player.hp()
 		let wave = 20
-	
+
 		const scoreCount = add([
 			text(`${score}`),
 			pos(50, 60),
@@ -85,7 +88,7 @@ export default function levelTwo(info) {
 			layer("ui"),
 			"wave"
 		]);
-	
+
 		function health(hp) {
 			// these functions will directly assign to the game object
 			return {
@@ -120,9 +123,9 @@ export default function levelTwo(info) {
 			} else {
 				waveCount.use(text(`Wave :${wave}`, 8))
 			}
-	
+
 		}
-	
+
 		function loadMap() {
 			let topWall = add([
 				sprite("hello"),
@@ -145,14 +148,6 @@ export default function levelTwo(info) {
 				pos(0, 7)
 			])
 		}
-		function spawnDoor() {
-			let door = add([
-				sprite("bullet"),
-				pos(400, 400),
-				scale(2),
-				"door",
-			])
-		}
 		function createEnemy() {
 			let enmy = [
 				sprite("enemy"),
@@ -165,7 +160,7 @@ export default function levelTwo(info) {
 			]
 			add(enmy)
 		}
-	
+
 		function createEnemy2() {
 			let enmy2 = [
 				sprite("enemy2"),
@@ -178,7 +173,7 @@ export default function levelTwo(info) {
 			]
 			add(enmy2)
 		}
-	
+
 		function createEnemy3() {
 			let enmy3 = [
 				sprite("enemy3"),
@@ -191,9 +186,9 @@ export default function levelTwo(info) {
 			]
 			add(enmy3)
 		}
-	
+
 		function createBullet(direction) {
-	
+
 			let b = add([
 				sprite("bullet"),
 				pos(player.pos.x, player.pos.y),
@@ -202,8 +197,8 @@ export default function levelTwo(info) {
 					wDirection: direction
 				},
 			])
-	
-	
+
+
 		}
 		k.keyPress("s", () => {
 			d = "down"
@@ -233,45 +228,50 @@ export default function levelTwo(info) {
 			player.move(300, 0)
 		});
 		k.keyPress("space", () => {
-	
+
 			play("shoot", {
 				volume: 0.6,
 				speed: 1.0
 			})
 			createBullet(d)
 		});
-	
+
 		k.keyPress("enter", () => {
-			music.pause()
-			go("bossFight", ({
+			go("levelTwoPointFive", ({
 				theScore: score,
 				theHp: hp,
-				theName: info.theName
+				theName: info.name,
+				theMusic : music
 			}));
 		});
-	
+
 		k.action("bullet", (r) => {
 			let x = r.wDirection
 			if (x == "down") {
 				r.move(0, 500)
 			}
 			if (x == "up") {
-	
+
 				r.move(0, -500)
 			}
 			if (x == "left") {
-	
+
 				r.move(-500, 0)
 			}
 			if (x == "right") {
-	
+
 				r.move(500, 0)
 			}
 			wait(0.5, () => {
 				destroy(r)
 			})
 		})
-	
+		k.action("reset",(r)=>{
+			if (r.pos.x > 790 || r.pos.x < 0 || r.pos.y > 790 || r.pos.y < 0){
+				destroy(r)
+				console.log("destryoed");
+			}
+		})
 		k.action("enemy", (e) => {
 			findHades(player.pos.x, player.pos.y, e.pos.x, e.pos.y)
 				.then((data) => {
@@ -293,14 +293,6 @@ export default function levelTwo(info) {
 				})
 			e.resolve()
 		})
-		k.collides("door", "hades", () => {
-			music.pause()
-			go("bossFight", ({
-				theScore: score,
-				theHp: hp,
-				theName: info.name
-			}));
-		})
 		k.collides("reset", "hades", (e, h) => {
 			camShake(12)
 			play("hit", {
@@ -309,6 +301,12 @@ export default function levelTwo(info) {
 			})
 			h.hurt(1)
 			updateHP()
+		})
+				k.action("reset",(r)=>{
+			if (r.pos.x > 790 || r.pos.x < 0 || r.pos.y > 790 || r.pos.y < 0){
+				destroy(r)
+				console.log("destryoed");
+			}
 		})
 		k.collides("enemy", "bullet", (e, b) => {
 			e.hurt(1)
@@ -328,27 +326,37 @@ export default function levelTwo(info) {
 		player.action(() => {
 			player.resolve()
 		})
-	
-		loadMap()
-	
-		var refreshId =
-			setInterval(function () {
-				console.log("level2");
-				createEnemy()
-				createEnemy2()
-				createEnemy3()
-				updateWave()
-				if (wave <= 0) {
-					clearInterval(refreshId);
-					
-					wait(6, () => {
-						spawnDoor()
-					})
-				}
-			}, 4000);
-	
-	}
-	}
 
-	
+		loadMap()
+
+		
+
+		var spawnEnemies =
+			k.loop(4, () => {
+				if (wave < 18) {
+					k.loop(2, () => {
+						var arr = get("reset")
+						console.log(arr);
+						if (arr.length == 0) {
+							go("levelTwoPointFive", ({
+								theScore: score,
+								theHp: hp,
+								theName: info.name
+							}));
+						}
+					})
+					
+
+				} else {
+					createEnemy()
+					createEnemy2()
+					createEnemy3()
+					updateWave()
+				}
+			})
+
+	}
+}
+
+
 
