@@ -1,6 +1,8 @@
 import k from '../../kaboom.js'
 import findHades from '../utils/findHades.js'
-import checkSector from './movementGuide.js'
+import findNextSector from './movementGuide.js'
+import generatePos from '../utils/generateEnemyPos.js'
+import shootToSector from '../utils/checkSector.js'
 k.loadSprite("hades", "./src/sprites/friendly/hades.png")
 k.loadSprite("bullet", "./src/sprites/world/bullet.png")
 k.loadSprite("enemy", "./src/sprites/enemy/enemy.png")
@@ -11,6 +13,7 @@ k.loadSprite("wall", "./src/sprites/world/wall.png")
 k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
+k.loadSound("hurt", "./src/components/sounds/explosion.wav")
 k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
 
 
@@ -35,12 +38,13 @@ export default function bossFight(info) {
 			solid,
 			layers,
 			layer,
-			time,
 			rgba,
 			debug,
+			
 		} = k
 
 		let d = "up"
+		let shootWhere = 0
 
 
 		const music = play("firstPhase", {
@@ -52,7 +56,7 @@ export default function bossFight(info) {
 			sprite("hades"),
 			pos(100, 100),
 			scale(2),
-			health(20),
+			health(info.theHp),
 			solid(),
 			"hades"
 		])
@@ -64,13 +68,8 @@ export default function bossFight(info) {
 		], "game");
 
 
-		var score = 20
+		var score = info.theScore
 		var hp = player.hp();
-		//var bossHP = boss.hp()
-		var bossOriginalPos = {
-			posX: 400,
-			posY: 400
-		}
 
 		const scoreCount = add([
 			text(`${score}`),
@@ -103,9 +102,18 @@ export default function bossFight(info) {
 			return {
 				hurt(n) {
 					hp -= n;
+						
 					if (hp <= 0) {
+						if(this._tags[0] == "boss"){
+							destroy(this)
+							music.stop()
+							go("startScreen")
+						} else {
+							destroy(this)
+						}
 						// trigger a custom event
-						destroy(this)
+						
+						
 					}
 				},
 				heal(n) {
@@ -116,35 +124,9 @@ export default function bossFight(info) {
 				},
 			};
 		}
-		// function bloop(){
-		// 	return {
-		// 		bruh(){
-		// 			boss.action(()=>{
-		// 				frames++
-		// 				boss.move(200,0)
-		// 				if (frames == 40){
-		// 					bossStop()
-		// 					console.log("hi");
-		// 				}
-		// 				console.log("hi");
-		// 			})
-		// 		},
-		// 		bruhStop(){
-		// 			boss.action(()=>{
-		// 				boss.move(0,0)
-		// 			})
-		// 		}
-		// 	}
-		// }
-		var okk = true
-		
-		function bloop(){
-			boss.move(200,200)
-		
-		}
-		function bossStop(){
-			boss.stop()
-		}
+
+		var doesBossMove = false
+
 		function updateScore() {
 			score++
 			scoreCount.use(text(`${score}`))
@@ -169,36 +151,121 @@ export default function bossFight(info) {
 				pos(boss.pos.x, boss.pos.y),
 				"bossBullet2",
 			])
-			k.action("bossBullet", (b) => {
-				b.move(200, 200)
+		}
+		var bDir ={
+			//topLeft to btmLeft
+			topLeftToBtmLeft:{
+				x:258,
+				y:646
+			},
+			topLeftToBtmRight:{
+				x:761,
+				y:699
+			},
+			topLeftToTopRight:{
+				x:761,
+				y:215
+			},
+			btmRightToTopLeft:{
+				x:-761,
+				y:-699
+			},
+			btmRightToTopRight:{
+				x:0,
+				y:-500
+			},
+			btmRightToBtmLeft:{
+				x:-600,
+				y:0
+			},
+			btmLeftToTopLeft:{
+				x:20,
+				y:-450
+			},
+			btmLeftToBtmRight:{
+				x:450,
+				y:0
+			},
+			btmLeftToTopRight:{
+				x:400 ,
+				y:-400
+			},
+			topRightToTopLeft:{
+				x:-400,
+				y: 20
+			},
+			topRightToBtmLeft:{
+				x:-400 ,
+				y:400
+			},
+			topRightToBtmRight:{
+				x:20,
+				y:400
+			},
+
+		}
+
+
 	
+
+			k.action("bossBullet", (b) => {
+				if(shootWhere == 1){
+					b.move(bDir.topLeftToBtmLeft.x,bDir.topLeftToBtmLeft.y)
+				}
+				if (shootWhere == 2){
+					b.move(bDir.topRightToBtmLeft.x,bDir.topRightToBtmLeft.y)
+				}
+				if(shootWhere == 3){
+					b.move(bDir.btmLeftToBtmRight.x,bDir.btmLeftToBtmRight.y)
+				}
+				if(shootWhere == 4){
+					b.move(bDir.btmRightToBtmLeft.x,bDir.btmRightToBtmLeft.y)
+				}
+				
 				wait(1, () => {
 					destroy(b)
 				})
+				
 			})
 			k.action("bossBullet1", (b) => {
-				b.move(400, 200)
-	
+				if(shootWhere == 1){
+					b.move(bDir.topLeftToBtmRight.x,bDir.topLeftToBtmRight.y)
+				}
+				if (shootWhere == 2){
+					b.move(bDir.topRightToBtmRight.x,bDir.topRightToBtmRight.y)
+				}
+				if(shootWhere == 3){
+					b.move(bDir.btmLeftToTopLeft.x,bDir.btmLeftToTopLeft.y)
+				}
+				if(shootWhere == 4){
+					b.move(bDir.btmRightToTopLeft.x,bDir.btmRightToTopLeft.y)
+				}
+				
 				wait(1, () => {
 					destroy(b)
 				})
 			})
 			k.action("bossBullet2", (b) => {
-				b.move(600, 200)
+				if(shootWhere == 1){
+					b.move(bDir.topLeftToTopRight.x,bDir.topLeftToTopRight.y)
+				}
+				if (shootWhere == 2){
+					b.move(bDir.topRightToTopLeft.x,bDir.topRightToTopLeft.y)
+				}
+				if(shootWhere == 3){
+					b.move(bDir.btmLeftToTopRight.x,bDir.btmLeftToTopRight.y)
+				}
+				if(shootWhere == 4){
+					b.move(bDir.btmRightToTopRight.x,bDir.btmRightToTopRight.y)
+				}
+				
 	
 				wait(1, () => {
 					destroy(b)
 				})
 			})
-		}
+		
 
-		const bossNormalMovement = (x, y) => {
-			boss.move(x, y)
-
-		}
-		// const bossStop = () => {
-		// 	boss.move(0, 0)
-		// }
 
 		function loadMap() {
 			let topWall = add([
@@ -224,31 +291,6 @@ export default function bossFight(info) {
 		}
 
 
-		// function createEnemy2() {
-		// 	let enmy2 = [
-		// 		sprite("enemy2"),
-		// 		pos(rand(vec2(0), vec2(790))),
-		// 		scale(2),
-		// 		"enemy2",
-		// 		"reset",
-		// 		health(2),
-		// 		solid(),
-		// 	]
-		// 	add(enmy2)
-		// }
-
-		// function createEnemy3() {
-		// 	let enmy3 = [
-		// 		sprite("enemy3"),
-		// 		pos(rand(vec2(10), vec2(790))),
-		// 		scale(2),
-		// 		"enemy3",
-		// 		"reset",
-		// 		health(2),
-		// 		solid(),
-		// 	]
-		// 	add(enmy3)
-		// }
 
 		function createBullet(direction) {
 
@@ -279,7 +321,6 @@ export default function bossFight(info) {
 			d = "right"
 		})
 		k.keyDown("s", () => {
-			boss.move
 			player.move(0, 300)
 		});
 		k.keyDown("w", () => {
@@ -300,20 +341,28 @@ export default function bossFight(info) {
 						
 		
 		});
-		k.action("boss",()=>{
-			console.log(okk);
-			if(okk){
-				boss.move(200,0)
+		var randX = 0
+		var randY = 0
+		//000000000000000000000000000000000000000
+	
+		boss.action(()=>{
+			if(doesBossMove){
+				
+				boss.move(randX,randY)
+				
+			} else {
+				
 			}
+			
 		})
 
 		k.keyPress("enter", () => {
-			okk = false
-		
+			
+			console.log(debug.objCount());
 
 		});
 		k.keyPress("backspace", () => {
-			okk=true
+			doesBossMove=true
 		});
 
 		k.action("bullet", (r) => {
@@ -362,141 +411,80 @@ export default function bossFight(info) {
 			h.hurt(1)
 			updateHP()
 		})
-		k.collides("enemy2", "bullet", (e, b) => {
+		k.collides("boss", "bullet", (e, b) => {
 			e.hurt(1)
+			boss.changeSprite("enemy2")
+			
+			wait(0.3,()=>{
+				boss.changeSprite("enemy")
+			})
 			destroy(b)
 			updateScore()
 		})
-		k.collides("enemy3", "bullet", (e, b) => {
+		k.collides("hades", "bossBullet", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
 			e.hurt(1)
 			destroy(b)
-			updateScore()
+			updateHP()
 		})
-		let frames = 0
-		// boss.action(() => {
-
-		// 	switch (Math.floor(time())) {
-		// 		case 5:
-		// 			boss.move(200, 200)
-		// 			break;
-		// 		case 6:
-		// 			frames++
-		// 			if(frames == 5){
-					
-		// 				checkSector(boss.pos.x,boss.pos.y)
-		// 			}
-		// 			if (frames == 10) {
-						
-		// 				bossNormalAttack()
-		// 			}
-		// 			if (frames >= 60) {
-		// 				frames = 0
-		// 			}
-					
-		// 			break;
-
-		// 		case 10:
-		// 			boss.move(200, 200)
-
-		// 			console.log(frames);
-		// 			break;
-
-		// 		case 11:
-		// 			frames++
-		// 			if(frames == 5){
-					
-		// 				checkSector(boss.pos.x,boss.pos.y)
-		// 			}
-		// 			if (frames == 10) {
-						
-		// 				bossNormalAttack()
-		// 			}
-		// 			if (frames == 59 || frames == 60) {
-		// 				frames = 0
-		// 			}
-
-		// 			break;
-		// 		case 15:
-		// 			boss.move(200, 0)
-
-		// 			console.log("15");
-		// 			break;
-		// 		case 16:
-		// 			frames++
-		// 			if(frames == 5){
-					
-		// 				checkSector(boss.pos.x,boss.pos.y)
-		// 			}
-		// 			if (frames == 10) {
-						
-		// 				bossNormalAttack()
-		// 			}
-		// 			if (frames == 59 || frames == 60) {
-		// 				frames = 0
-		// 			}
-
-		// 			break;
-
-		// 		case 20:
-		// 			boss.move(-200, -200)
-
-		// 			console.log("20");
-		// 			break;
-		// 		case 21:
-		// 			frames++
-		// 			if(frames == 5){
-					
-		// 				checkSector(boss.pos.x,boss.pos.y)
-		// 			}
-		// 			if (frames == 10) {
-						
-		// 				bossNormalAttack()
-		// 			}
-		// 			if (frames == 59 || frames == 60) {
-		// 				frames = 0
-		// 			}
-
-		// 			break;
-
-		// 		case 25:
-		// 			console.log("25");
-		// 			break;
-
-		// 		case 30:
-		// 			console.log("30");
-		// 			break;
-
-		// 		case 35:
-		// 			console.log("35");
-		// 			break;
-
-		// 		case 40:
-		// 			console.log("40");
-		// 			break;
-		// 	}
-
-
-		// })
-		k.loop(5,()=>{
+		k.collides("hades", "bossBullet1", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
+		k.collides("hades","bossBullet2", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
 		
-			bossNormalAttack()
+		k.loop(3,()=>{
+			findNextSector(boss.pos.x,boss.pos.y)
+			.then((data)=>{
+				
+				randX = data.x
+				randY = data.y
+			})
+			if(!doesBossMove){
+				doesBossMove = true
+				
+			}
+			
+			wait(2,()=>{
+		
+				shootToSector(boss.pos.x,boss.pos.y)
+				.then((data)=>{
+					shootWhere = data
+					console.log(shootWhere);
+				})
+				doesBossMove = false
+				bossNormalAttack()
+				
+				
+			})
 			
 		})
 		
 
-		
-			
-		
-		
 		player.action(() => {
 			player.resolve()
 		})
 
-		
 		loadMap()
-
-
-
 	}
 
 }

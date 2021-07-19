@@ -6,12 +6,11 @@ import levelTwoPointFive from './components/scenes/level_2PointFive.js'
 import bossFight from './components/scenes/bossFight.js'
 import startScreen from './components/scenes/start.js'
 
-var info ={}
 k.scene("startScreen", startScreen())
 k.scene("level1",levelOne())
 k.scene("level2", levelTwo())
 k.scene("levelTwoPointFive", levelTwoPointFive())
 k.scene("bossFight", bossFight())
 
-k.start("bossFight")
+k.start("startScreen")
 
