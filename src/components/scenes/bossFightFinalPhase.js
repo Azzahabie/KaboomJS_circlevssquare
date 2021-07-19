@@ -14,9 +14,9 @@ k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
 k.loadSound("hurt", "./src/components/sounds/explosion.wav")
-k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
+k.loadSound("secondphase", "./src/components/sounds/secondphase.mp3")
 
-export default function bossFight(info) {
+export default function bossFightFinalPhase(info) {
 	return (info) => {
 
 		const {
@@ -35,10 +35,9 @@ export default function bossFight(info) {
 			layers,
 			layer,
 			rgba,
-			camRot,
-			camIgnore,
+			camPos,
 			camScale,
-			camPos
+
 		} = k
 
 		let d = "up"
@@ -47,8 +46,9 @@ export default function bossFight(info) {
 		var randY = 0
 		var doesBossMove = false
 
+		
 
-		const music = play("firstPhase", {
+		const music = play("secondphase", {
 			volume: 0.4,
 		})
 
@@ -56,7 +56,7 @@ export default function bossFight(info) {
 
 		const player = add([
 			sprite("hades"),
-			pos(100, 100),
+			pos(info.hadesPosX, info.hadesPosY),
 			scale(2),
 			health(info.theHp),
 			solid(),
@@ -92,15 +92,15 @@ export default function bossFight(info) {
 		]);
 
 		let boss = add([
-			sprite("enemy"),
-			pos(200, 200),
+			sprite("enemy3"),
+			pos(info.bossX, info.bossY),
 			scale(5),
 			"boss",
 			"reset",
-			health(1	),
+			health(100),
 			solid(),
 		])
-
+	
 		function health(hp) {
 			// these functions will directly assign to the game object
 			return {
@@ -109,34 +109,9 @@ export default function bossFight(info) {
 
 					if (hp <= 0) {
 						if (this._tags[0] == "boss") {
-							theLoop.stop()
+							destroy(this)
 							music.stop()
-							var shaake = k.loop(0.1,()=>{
-								camShake(20)
-							})
-								
-							
-							
-							wait(3,(()=>{
-								
-								camPos(boss.pos.x+45,boss.pos.y+40)
-								camScale(2.5)
-								wait(2,(()=>{
-									info["camPosX"] = boss.pos.x+45
-									info["camPosY"] = boss.pos.y+40
-									info["bossX"] = boss.pos.x
-									info["bossY"] = boss.pos.y
-									info["hadesPosX"] = player.pos.x
-									info["hadesPosY"] = player.pos.y
-
-									shaake.stop()
-								
-									go("bossFightTransition",info)
-								}))
-							}))
-								
-							
-							
+							go("startScreen")
 						} else {
 							destroy(this)
 						}
@@ -327,7 +302,6 @@ export default function bossFight(info) {
 					wDirection: direction
 				},
 			])
-			
 		}
 
 		k.keyPress("s", () => { d = "down" })
@@ -406,7 +380,7 @@ export default function bossFight(info) {
 			boss.changeSprite("enemy2")
 
 			wait(0.3, () => {
-				boss.changeSprite("enemy")
+				boss.changeSprite("enemy3")
 			})
 			destroy(b)
 			updateScore()
@@ -444,7 +418,8 @@ export default function bossFight(info) {
 			destroy(b)
 			updateHP()
 		})
-		var theLoop = k.loop(3, () => {
+
+		k.loop(2.5, () => {
 			findNextSector(boss.pos.x, boss.pos.y)
 				.then((data) => {
 					randX = data.x
@@ -462,9 +437,12 @@ export default function bossFight(info) {
 					})
 				doesBossMove = false
 				bossNormalAttack()
+				wait(0.5,()=>{
+
+					bossNormalAttack()
+				})
 			})
 		})
-		
 
 		player.action(() => {
 			player.resolve()

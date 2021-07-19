@@ -48,7 +48,7 @@ export default function level1(name) {
 			sprite("hades"),
 			pos(200, 200),
 			scale(2),
-			health(10),
+			health(100),
 			solid(),
 			"hades"
 		])
@@ -87,6 +87,7 @@ export default function level1(name) {
 			layer("ui"),
 			"wave"
 		]);
+
 		function spawnDoor() {
 			let door = add([
 				sprite("bullet"),
@@ -95,6 +96,7 @@ export default function level1(name) {
 				"door",
 			])
 		}
+		
 		function health(hp) {
 			// these functions will directly assign to the game object
 			return {
@@ -341,7 +343,7 @@ export default function level1(name) {
 		loadMap()
 		var spawnEnemies =
 				k.loop(5,()=>{
-					if (wave < 9) {
+					if (wave < 1) {
 						k.loop(2,()=>{
 							var arr = get("reset")
 							if(arr.length == 0){

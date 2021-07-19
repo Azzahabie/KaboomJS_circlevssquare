@@ -11,7 +11,7 @@ k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
 k.loadSound("levelTwoMusic", "./src/components/sounds/level2.mp3")
-import {stopMusic} from './level_2.js'
+
 
 export default function levelTwoPointFive(info) {
 	return (info) => {
@@ -88,6 +88,15 @@ export default function levelTwoPointFive(info) {
 			layer("ui"),
 			"wave"
 		]);
+
+		function spawnDoor() {
+			let door = add([
+				sprite("bullet"),
+				pos(400, 400),
+				scale(2),
+				"door",
+			])
+		}
 
 		function health(hp) {
 			// these functions will directly assign to the game object
@@ -302,6 +311,14 @@ export default function levelTwoPointFive(info) {
 			h.hurt(1)
 			updateHP()
 		})
+		k.collides("door", "hades", () => {
+			x.stop()
+							go("bossFight", ({
+								theScore: score,
+								theHp: hp,
+								theName: info.name
+							}));
+		})
 				k.action("reset",(r)=>{
 			if (r.pos.x > 790 || r.pos.x < 0 || r.pos.y > 790 || r.pos.y < 0){
 				destroy(r)
@@ -331,21 +348,13 @@ export default function levelTwoPointFive(info) {
 
 		var spawnEnemies =
 			k.loop(4, () => {
-				console.log(wave);
-				console.log(get("reset"));
-				if (wave == 7) {
+				if (wave == 0) {
 					k.loop(2, () => {
 						var arr = get("reset")
 						if (arr.length == 0) {
-							x.stop()
-							go("bossFight", ({
-								theScore: score,
-								theHp: hp,
-								theName: info.name
-							}));
+						spawnDoor()
 						}
 					})
-					console.log("stooping spawn ene,y");
 					spawnEnemies.stop()
 
 				} else {

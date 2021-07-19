@@ -11,9 +11,7 @@ k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
 k.loadSound("levelTwoMusic", "./src/components/sounds/level2.mp3")
-export const stopMusic = ()=>{
-	console.log("owkrs");
-}
+
 export default function levelTwo(info) {
 	return (info) => {
 		const {
@@ -269,7 +267,6 @@ export default function levelTwo(info) {
 		k.action("reset",(r)=>{
 			if (r.pos.x > 790 || r.pos.x < 0 || r.pos.y > 790 || r.pos.y < 0){
 				destroy(r)
-				console.log("destryoed");
 			}
 		})
 		k.action("enemy", (e) => {
@@ -305,7 +302,7 @@ export default function levelTwo(info) {
 				k.action("reset",(r)=>{
 			if (r.pos.x > 790 || r.pos.x < 0 || r.pos.y > 790 || r.pos.y < 0){
 				destroy(r)
-				console.log("destryoed");
+			
 			}
 		})
 		k.collides("enemy", "bullet", (e, b) => {
@@ -329,24 +326,21 @@ export default function levelTwo(info) {
 
 		loadMap()
 
-		
-
-		var spawnEnemies =
 			k.loop(4, () => {
-				if (wave < 18) {
+				if (wave == 10) {
 					k.loop(2, () => {
 						var arr = get("reset")
-						console.log(arr);
 						if (arr.length == 0) {
-							go("levelTwoPointFive", ({
+							go("levelTwoPointFive", {
 								theScore: score,
 								theHp: hp,
-								theName: info.name
-							}));
+								theName: info.name,
+								theMusic : music
+							}
+							)
 						}
 					})
 					
-
 				} else {
 					createEnemy()
 					createEnemy2()

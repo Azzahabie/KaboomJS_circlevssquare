@@ -4,8 +4,8 @@
 // function getRandomArbitrary() {
 //     return Math.floor(Math.random() * (max - min) + min);
 // }
-import generatePos from '../utils/generateSectorPos.js'
-import pathFinder from '../utils/findSector.js'
+import generatePos from './generateSectorPos.js'
+import pathFinder from './findSector.js'
 
 
 function checkSector(positionX,positionY){
