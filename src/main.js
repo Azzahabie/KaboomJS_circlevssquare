@@ -7,6 +7,7 @@ import bossFight from './components/scenes/bossFight.js'
 import bossFightFinalPhase from './components/scenes/bossFightFinalPhase.js'
 import bossFightTransition from './components/scenes/bossFightTransition.js'
 import startScreen from './components/scenes/start.js'
+import endScreen from './components/scenes/endScreen.js'
 
 k.scene("startScreen", startScreen())
 k.scene("level1",levelOne())
@@ -15,6 +16,7 @@ k.scene("levelTwoPointFive", levelTwoPointFive())
 k.scene("bossFight", bossFight())
 k.scene("bossFightFinalPhase", bossFightFinalPhase())
 k.scene("bossFightTransition", bossFightTransition())
+k.scene("endScreen", endScreen())
 
 k.start("startScreen")
 
