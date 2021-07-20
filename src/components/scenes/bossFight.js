@@ -375,22 +375,6 @@ export default function bossFight(info) {
 		})
 
 
-		k.action("enemy2", (e) => {
-			findHades(player.pos.x, player.pos.y, e.pos.x, e.pos.y)
-				.then((data) => {
-					e.move(data.x, data.y)
-				})
-			e.resolve()
-		})
-
-		k.action("enemy3", (e) => {
-			findHades(player.pos.x, player.pos.y, e.pos.x, e.pos.y)
-				.then((data) => {
-					e.move(data.x, data.y)
-				})
-			e.resolve()
-		})
-
 		k.collides("reset", "hades", (e, h) => {
 			camShake(12)
 			play("hit", {
