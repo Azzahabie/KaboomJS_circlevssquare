@@ -35,16 +35,17 @@ export default function bossFightFinalPhase(info) {
 			layers,
 			layer,
 			rgba,
+			rand,
+			vec2,
 			camPos,
 			camScale,
 
 		} = k
 
 		let d = "up"
-		let shootWhere = 0
 		var randX = 0
 		var randY = 0
-		var doesBossMove = false
+		var doesBossMove = true
 
 		
 
@@ -101,6 +102,57 @@ export default function bossFightFinalPhase(info) {
 			solid(),
 		])
 	
+		function createEnemy() {
+			let enmy = add([
+				sprite("enemy"),
+				pos(rand(vec2(0), vec2(790))),
+				scale(3),
+				"bot",
+				"reset",
+				health(4),
+				solid(),
+			])
+			let enmy1 = add([
+				sprite("enemy"),
+				pos(rand(vec2(0), vec2(790))),
+				scale(3),
+				"bot1",
+				"reset",
+				health(4),
+				solid(),
+			])
+			let enmy2 = add([
+				sprite("enemy"),
+				pos(rand(vec2(0), vec2(790))),
+				scale(3),
+				"bot2",
+				"reset",
+				health(4),
+				solid(),
+			])
+			
+		}
+		k.action("bot", (e) => {
+			findHades(player.pos.x, player.pos.y, e.pos.x, e.pos.y)
+				.then((data) => {
+					e.move(data.x, data.y)
+				})
+			e.resolve()
+		})
+		k.action("bot1", (e) => {
+			findHades(player.pos.x, player.pos.y, e.pos.x, e.pos.y)
+				.then((data) => {
+					e.move(data.x, data.y)
+				})
+			e.resolve()
+		})
+		k.action("bot2", (e) => {
+			findHades(player.pos.x, player.pos.y, e.pos.x, e.pos.y)
+				.then((data) => {
+					e.move(data.x, data.y)
+				})
+			e.resolve()
+		})
 		function health(hp) {
 			// these functions will directly assign to the game object
 			return {
@@ -155,6 +207,31 @@ export default function bossFightFinalPhase(info) {
 				sprite("bullet"),
 				pos(boss.pos.x, boss.pos.y),
 				"bossBullet2",
+			])
+			let b3 = add([
+				sprite("bullet"),
+				pos(boss.pos.x, boss.pos.y),
+				"bossBullet3",
+			])
+			let b4 = add([
+				sprite("bullet"),
+				pos(boss.pos.x, boss.pos.y),
+				"bossBullet4",
+			])
+			let b5 = add([
+				sprite("bullet"),
+				pos(boss.pos.x, boss.pos.y),
+				"bossBullet5",
+			])
+			let b6 = add([
+				sprite("bullet"),
+				pos(boss.pos.x, boss.pos.y),
+				"bossBullet6",
+			])
+			let b7 = add([
+				sprite("bullet"),
+				pos(boss.pos.x, boss.pos.y),
+				"bossBullet7",
 			])
 		}
 
@@ -212,18 +289,7 @@ export default function bossFightFinalPhase(info) {
 		}
 
 		k.action("bossBullet", (b) => {
-			if (shootWhere == 1) {
 				b.move(bDir.topLeftToBtmLeft.x, bDir.topLeftToBtmLeft.y)
-			}
-			if (shootWhere == 2) {
-				b.move(bDir.topRightToBtmLeft.x, bDir.topRightToBtmLeft.y)
-			}
-			if (shootWhere == 3) {
-				b.move(bDir.btmLeftToBtmRight.x, bDir.btmLeftToBtmRight.y)
-			}
-			if (shootWhere == 4) {
-				b.move(bDir.btmRightToBtmLeft.x, bDir.btmRightToBtmLeft.y)
-			}
 
 			wait(1, () => {
 				destroy(b)
@@ -232,18 +298,7 @@ export default function bossFightFinalPhase(info) {
 		})
 
 		k.action("bossBullet1", (b) => {
-			if (shootWhere == 1) {
 				b.move(bDir.topLeftToBtmRight.x, bDir.topLeftToBtmRight.y)
-			}
-			if (shootWhere == 2) {
-				b.move(bDir.topRightToBtmRight.x, bDir.topRightToBtmRight.y)
-			}
-			if (shootWhere == 3) {
-				b.move(bDir.btmLeftToTopLeft.x, bDir.btmLeftToTopLeft.y)
-			}
-			if (shootWhere == 4) {
-				b.move(bDir.btmRightToTopLeft.x, bDir.btmRightToTopLeft.y)
-			}
 
 			wait(1, () => {
 				destroy(b)
@@ -251,20 +306,46 @@ export default function bossFightFinalPhase(info) {
 		})
 
 		k.action("bossBullet2", (b) => {
-			if (shootWhere == 1) {
 				b.move(bDir.topLeftToTopRight.x, bDir.topLeftToTopRight.y)
-			}
-			if (shootWhere == 2) {
+			
+			wait(1, () => {
+				destroy(b)
+			})
+		})
+		k.action("bossBullet3", (b) => {
 				b.move(bDir.topRightToTopLeft.x, bDir.topRightToTopLeft.y)
-			}
-			if (shootWhere == 3) {
-				b.move(bDir.btmLeftToTopRight.x, bDir.btmLeftToTopRight.y)
-			}
-			if (shootWhere == 4) {
+
+			wait(1, () => {
+				destroy(b)
+			})
+
+		})
+
+		k.action("bossBullet4", (b) => {
+				b.move(bDir.topRightToBtmLeft.x, bDir.topRightToBtmLeft.y)
+
+			wait(1, () => {
+				destroy(b)
+			})
+		})
+
+		k.action("bossBullet5", (b) => {
 				b.move(bDir.btmRightToTopRight.x, bDir.btmRightToTopRight.y)
-			}
-
-
+			
+			wait(1, () => {
+				destroy(b)
+			})
+		})
+		k.action("bossBullet6", (b) => {
+				b.move(bDir.btmRightToTopLeft.x, bDir.btmRightToTopLeft.y)
+			
+			wait(1, () => {
+				destroy(b)
+			})
+		})
+		k.action("bossBullet7", (b) => {
+				b.move(bDir.btmLeftToTopRight.x, bDir.btmLeftToTopRight.y)
+			
 			wait(1, () => {
 				destroy(b)
 			})
@@ -325,6 +406,7 @@ export default function bossFightFinalPhase(info) {
 			if (doesBossMove) {
 				boss.move(randX, randY)
 			} 
+			boss.resolve()
 		})
 
 		k.action("bullet", (r) => {
@@ -386,6 +468,22 @@ export default function bossFightFinalPhase(info) {
 			updateScore()
 		})
 
+		k.collides("bullet", "bot", (e, b) => {
+			b.hurt(1)
+			destroy(e)
+			updateScore()
+		})
+		k.collides("bullet", "bot1", (e, b) => {
+			b.hurt(1)
+			destroy(e)
+			updateScore()
+		})
+		k.collides("bullet", "bot2", (e, b) => {
+			b.hurt(1)
+			destroy(e)
+			updateScore()
+		})
+
 		k.collides("hades", "bossBullet", (e, b) => {
 			camShake(12)
 			play("hurt", {
@@ -396,7 +494,6 @@ export default function bossFightFinalPhase(info) {
 			destroy(b)
 			updateHP()
 		})
-
 		k.collides("hades", "bossBullet1", (e, b) => {
 			camShake(12)
 			play("hurt", {
@@ -407,7 +504,6 @@ export default function bossFightFinalPhase(info) {
 			destroy(b)
 			updateHP()
 		})
-
 		k.collides("hades", "bossBullet2", (e, b) => {
 			camShake(12)
 			play("hurt", {
@@ -418,7 +514,64 @@ export default function bossFightFinalPhase(info) {
 			destroy(b)
 			updateHP()
 		})
+		k.collides("hades", "bossBullet3", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
+		k.collides("hades", "bossBullet4", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
+		k.collides("hades", "bossBullet5", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
+		k.collides("hades", "bossBullet6", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
+		k.collides("hades", "bossBullet7", (e, b) => {
+			camShake(12)
+			play("hurt", {
+				volume: 0.3,
+				speed: 1.0
+			})
+			e.hurt(1)
+			destroy(b)
+			updateHP()
+		})
 
+		k.loop(15,()=>{
+			createEnemy()
+		})
+
+		k.loop(2,()=>{
+			bossNormalAttack()
+		})
 		k.loop(2.5, () => {
 			findNextSector(boss.pos.x, boss.pos.y)
 				.then((data) => {
@@ -426,21 +579,11 @@ export default function bossFightFinalPhase(info) {
 					randY = data.y
 				})
 
-			if (!doesBossMove) {
-				doesBossMove = true
-			}
-
-			wait(2, () => {
-				shootToSector(boss.pos.x, boss.pos.y)
-					.then((data) => {
-						shootWhere = data
-					})
-				doesBossMove = false
-				bossNormalAttack()
-				wait(0.5,()=>{
-
+			wait(1, () => {
 					bossNormalAttack()
-				})
+			})
+			wait(2, () => {
+					bossNormalAttack()
 			})
 		})
 

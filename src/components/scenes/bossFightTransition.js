@@ -68,7 +68,7 @@ export default function bossFight(info) {
 		var l = 5
 		camScale(i)
 
-		wait(3,()=>{
+		wait(1,()=>{
 
 			let llop = k.loop(1,()=>{
 				boss.changeSprite("enemy2")
@@ -77,7 +77,7 @@ export default function bossFight(info) {
 				})
 			})
 
-			wait(7,()=>{
+			wait(3,()=>{
 				llop.stop()
 				boss.changeSprite("enemy3")
 				var kloop = k.loop(0.2,()=>{
