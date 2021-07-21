@@ -1,11 +1,13 @@
 import k from '../../kaboom.js'
 
-k.loadSound("startMenuSound","./src/components/sounds/startMenuMusic.mp3")
+k.loadSound("died","./src/components/sounds/died.mp3")
+k.loadSound("win","./src/components/sounds/winMusic.mp3")
 
-export default function startScreen(info) {
+export default function startScreen() {
+	
 	return (info) =>{
-		console.log(info);
 
+		console.log(info);
 		const {
 			add,
 			pos,
@@ -14,38 +16,68 @@ export default function startScreen(info) {
 			play,
 			scale,
 			text,
-			keyPress,
-			charInput,
 			rgba,
 		} = k
 	
 		
-		const music = play("startMenuSound");
-		music.detune(-200)
-		music.play()
-		
+
 
 	
+		const yourScore = add([
+			text(`Score`),
+			pos(345, 360),
+			color(rgba(1, 1, 1)),
+			scale(2),
+		]);
 		const score = add([
-			text(`Your Score:\n\n${info.theScore}`),
-			pos(270, 400),
+			text(`${info.theScore}`),
+			pos(364, 390),
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
-		const outcome = add([
-			text(`You ${info.outcome}`, 9),
-			pos(250, 300),
+		var music 
+
+		if(info.outcome){
+			music = play("win")
+			music.play()
+			const outcome = add([
+				text(`You Won!`, 9),
+				pos(320, 300),
+				color(rgba(1, 1, 1)),
+				scale(2),
+			]);
+		} else {
+			music = play("died")
+			music.play()
+			const outcome = add([
+				text(`You Died`, 9),
+				pos(314, 300),
+				color(rgba(1, 0.1, 0)),
+				scale(2),
+			]);
+			console.log(music);
+		}
+
+		const restart = add([
+			text(`Press Space To Restart`),
+			pos(215, 460),
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
-		const enterToStart = add([
-			text(`${info.theName}`, 10),
-			pos(170, 600),
+		const save = add([
+			text(`Press Enter To Save Score`),
+			pos(195, 500),
 			color(rgba(1, 1, 1)),
-			scale(2)
+			scale(2),
 		]);
-		
-		
+
+		k.keyPress("space", () => {
+			
+		})
+		k.keyPress("enter", () => {
+			music.pause()
+			go("startScreen")
+		})
 	
 	}
 	

@@ -8,7 +8,12 @@ import bossFightFinalPhase from './components/scenes/bossFightFinalPhase.js'
 import bossFightTransition from './components/scenes/bossFightTransition.js'
 import startScreen from './components/scenes/start.js'
 import endScreen from './components/scenes/endScreen.js'
-
+// var info = {
+//     theScore: 200,
+//     theHp: 3,
+//     theName: "Azza",
+//     outcome : true
+// }
 k.scene("startScreen", startScreen())
 k.scene("level1",levelOne())
 k.scene("level2", levelTwo())

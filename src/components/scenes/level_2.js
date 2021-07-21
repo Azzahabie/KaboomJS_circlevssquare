@@ -41,6 +41,7 @@ export default function levelTwo(info) {
 			volume: 0.6,
 			detune: -100
 		})
+		music.loop()
 		music.play()
 		const player = add([
 			sprite("hades"),
@@ -60,7 +61,7 @@ export default function levelTwo(info) {
 
 		var score = info.theScore
 		var hp = player.hp()
-		let wave = 20
+		let wave = 14
 
 		const scoreCount = add([
 			text(`${score}`),
@@ -93,6 +94,14 @@ export default function levelTwo(info) {
 				hurt(n) {
 					hp -= n;
 					if (hp <= 0) {
+						if (this._tags[0] == "hades") {
+							music.stop()
+							destroy(this)
+							info.theHp = hp
+							info.theScore = score
+							info["outcome"] = false
+							go("endScreen",info)
+						}
 						// trigger a custom event
 						destroy(this)
 					}
@@ -327,7 +336,7 @@ export default function levelTwo(info) {
 		loadMap()
 
 			k.loop(4, () => {
-				if (wave == 10) {
+				if (wave == 7) {
 					k.loop(2, () => {
 						var arr = get("reset")
 						if (arr.length == 0) {

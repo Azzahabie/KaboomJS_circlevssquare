@@ -98,7 +98,7 @@ export default function bossFightFinalPhase(info) {
 			scale(5),
 			"boss",
 			"reset",
-			health(100),
+			health(50),
 			solid(),
 		])
 	
@@ -160,6 +160,14 @@ export default function bossFightFinalPhase(info) {
 					hp -= n;
 
 					if (hp <= 0) {
+						if (this._tags[0] == "hades") {
+							music.stop()
+							destroy(this)
+							info.theHp = hp
+							info.theScore = score
+							info["outcome"] = false
+							go("endScreen",info)
+						}
 						if (this._tags[0] == "boss") {
 							destroy(this)
 							music.stop()

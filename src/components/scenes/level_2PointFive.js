@@ -38,11 +38,8 @@ export default function levelTwoPointFive(info) {
 
 		let d = "up"
 
-		// const music = play("levelTwoMusic", {
-		// 	volume: 0.6,
-		// 	detune: -100
-		// })
-		//music.play()
+
+
 		const player = add([
 			sprite("hades"),
 			pos(200, 200),
@@ -62,7 +59,7 @@ export default function levelTwoPointFive(info) {
 		var score = info.theScore
 		var hp = player.hp()
 		let wave = 10
-		const x = info.theMusic
+		const music = info.theMusic
 
 		const scoreCount = add([
 			text(`${score}`),
@@ -104,6 +101,14 @@ export default function levelTwoPointFive(info) {
 				hurt(n) {
 					hp -= n;
 					if (hp <= 0) {
+						if (this._tags[0] == "hades") {
+							music.stop()
+							destroy(this)
+							info.theHp = hp
+							info.theScore = score
+							info["outcome"] = false
+							go("endScreen",info)
+						}
 						// trigger a custom event
 						destroy(this)
 					}
@@ -246,7 +251,7 @@ export default function levelTwoPointFive(info) {
 		});
 
 		k.keyPress("enter", () => {
-			x.stop()
+			music.stop()
 			go("bossFight", ({
 				theScore: score,
 				theHp: hp,
@@ -312,7 +317,7 @@ export default function levelTwoPointFive(info) {
 			updateHP()
 		})
 		k.collides("door", "hades", () => {
-			x.stop()
+			music.stop()
 							go("bossFight", ({
 								theScore: score,
 								theHp: hp,

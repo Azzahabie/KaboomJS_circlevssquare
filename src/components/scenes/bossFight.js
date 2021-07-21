@@ -51,7 +51,7 @@ export default function bossFight(info) {
 		const music = play("firstPhase", {
 			volume: 0.4,
 		})
-
+		music.loop()
 		music.play()
 
 		const player = add([
@@ -97,7 +97,7 @@ export default function bossFight(info) {
 			scale(5),
 			"boss",
 			"reset",
-			health(1	),
+			health(25),
 			solid(),
 		])
 
@@ -108,12 +108,22 @@ export default function bossFight(info) {
 					hp -= n;
 
 					if (hp <= 0) {
+						if (this._tags[0] == "hades") {
+							theLoop.stop()
+							music.stop()
+							destroy(this)
+							info.theHp = hp
+							info.theScore = score
+							info["outcome"] = false
+							go("endScreen",info)
+						}
 						if (this._tags[0] == "boss") {
 							theLoop.stop()
 							music.stop()
 							var shaake = k.loop(0.1,()=>{
 								camShake(20)
 							})
+						
 								
 							
 							

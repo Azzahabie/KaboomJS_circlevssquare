@@ -34,29 +34,29 @@ export default function startScreen() {
 		})
 		keyPress("backspace", () => {
 			name = name.slice(0, -1);
-			names.use(text(`Enter Your Name:\n\n${name}`))
+			names.use(text(`Enter Your Name\n\n${name}`))
 		})
 	
 		charInput((ch) => {
 			name = name + ch;
-			names.use(text(`Enter Your Name:\n\n${name}`))
+			names.use(text(`Enter Your Name\n\n${name}`))
 		});
 	
 		const names = add([
-			text(`Enter Your Name:\n\n${name}`),
-			pos(270, 400),
+			text(`Enter Your Name\n\n${name}`),
+			pos(275, 400),
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
 		const welcome = add([
 			text(`WELCOME TO HADES`, 9),
-			pos(250, 300),
+			pos(256, 300),
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
 		const enterToStart = add([
 			text(`Press Enter To Start`, 10),
-			pos(170, 600),
+			pos(210, 600),
 			color(rgba(1, 1, 1)),
 			scale(2)
 		]);

@@ -11,9 +11,12 @@ k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
 k.loadSound("levelOneMusic", "./src/components/sounds/level1music.mp3")
+k.loadSound("died","./src/components/sounds/died.mp3")
 
-export default function level1(name) {
-	return (name)=>{
+
+export default function level1() {
+	return (theName)=>{
+		
 		const {
 			add,
 			pos,
@@ -39,16 +42,17 @@ export default function level1(name) {
 	
 		let d = "up"
 	
-		const music = play("levelOneMusic", {
+		const music = play("died", {
 			volume: 0.4,
 			detune: -100
 		})
+		music.loop()
 		music.play()
 		const player = add([
 			sprite("hades"),
 			pos(200, 200),
 			scale(2),
-			health(100),
+			health(20),
 			solid(),
 			"hades"
 		])
@@ -103,6 +107,16 @@ export default function level1(name) {
 				hurt(n) {
 					hp -= n;
 					if (hp <= 0) {
+						if (this._tags[0] == "hades") {
+							music.stop()
+							destroy(this)
+							go("endScreen",{
+								theScore: score,
+								theHp: hp,
+								theName: theName,
+								outcome : false
+							})
+						}
 						// trigger a custom event
 						destroy(this)
 					}
@@ -245,7 +259,7 @@ export default function level1(name) {
 		});
 	
 		k.keyPress("enter", () => {
-			music.pause()
+			music.stop()
 			spawnEnemies.stop()
 			go("level2", {
 				theScore: score,
