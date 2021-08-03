@@ -3,17 +3,17 @@ import findHades from '../utils/findHades.js'
 import findNextSector from '../utils/movementGuide.js'
 import shootToSector from '../utils/checkSector.js'
 
-k.loadSprite("hades", "./src/sprites/friendly/hades.png")
-k.loadSprite("bullet", "./src/sprites/world/bullet.png")
-k.loadSprite("enemy", "./src/sprites/enemy/enemy.png")
-k.loadSprite("enemy2", "./src/sprites/enemy/enemy2.png")
-k.loadSprite("enemy3", "./src/sprites/enemy/enemy3.png")
-k.loadSound("shoot", "./src/components/sounds/shoot.wav")
-k.loadSprite("wall", "./src/sprites/world/wall.png")
-k.loadSprite("hello", "./src/sprites/world/longwall.png")
-k.loadSprite("vWall", "./src/sprites/world/vWall.png")
-k.loadSound("hit", "./src/components/sounds/hit.wav")
-k.loadSound("hurt", "./src/components/sounds/explosion.wav")
+// k.loadSprite("hades", "./src/sprites/friendly/smaller.png")
+// k.loadSprite("bullet", "./src/sprites/world/bullet.png")
+// k.loadSprite("enemy", "./src/sprites/enemy/enemy.png")
+// k.loadSprite("enemy2", "./src/sprites/enemy/enemy2.png")
+// k.loadSprite("enemy3", "./src/sprites/enemy/enemy3.png")
+// k.loadSound("shoot", "./src/components/sounds/shoot.wav")
+// k.loadSprite("wall", "./src/sprites/world/wall.png")
+// k.loadSprite("hello", "./src/sprites/world/longwall.png")
+// k.loadSprite("vWall", "./src/sprites/world/vWall.png")
+// k.loadSound("hit", "./src/components/sounds/hit.wav")
+// k.loadSound("hurt", "./src/components/sounds/explosion.wav")
 k.loadSound("secondphase", "./src/components/sounds/secondphase.mp3")
 
 export default function bossFightFinalPhase(info) {

@@ -1,8 +1,8 @@
 import k from '../../kaboom.js'
 import findHades from '../utils/findHades.js'
-k.loadSprite("hades", "./src/sprites/friendly/hades.png")
-k.loadSprite("bullet", "./src/sprites/world/bullet.png")
-k.loadSprite("enemy", "./src/sprites/enemy/enemy.png")
+k.loadSprite("hades", "./src/sprites/friendly/smaller.png")
+k.loadSprite("bullet", "./src/sprites/world/bullet1.png")
+k.loadSprite("enemy", "./src/sprites/enemy/golemSmall.png")
 k.loadSprite("enemy2", "./src/sprites/enemy/enemy2.png")
 k.loadSprite("enemy3", "./src/sprites/enemy/enemy3.png")
 k.loadSound("shoot", "./src/components/sounds/shoot.wav")
@@ -10,8 +10,8 @@ k.loadSprite("wall", "./src/sprites/world/wall.png")
 k.loadSprite("hello", "./src/sprites/world/longwall.png")
 k.loadSprite("vWall", "./src/sprites/world/vWall.png")
 k.loadSound("hit", "./src/components/sounds/hit.wav")
-k.loadSound("levelOneMusic", "./src/components/sounds/level1music.mp3")
-k.loadSound("died","./src/components/sounds/died.mp3")
+
+k.loadSound("level1music","./src/components/sounds/level1music.mp3")
 
 
 export default function level1() {
@@ -36,13 +36,14 @@ export default function level1() {
 			layer,
 			rgba,
 			get,
+			rotate
 		} = k
 	
 	
 	
 		let d = "up"
 	
-		const music = play("died", {
+		const music = play("level1music", {
 			volume: 0.4,
 			detune: -100
 		})
@@ -51,7 +52,7 @@ export default function level1() {
 		const player = add([
 			sprite("hades"),
 			pos(200, 200),
-			scale(2),
+			scale(1),
 			health(20),
 			solid(),
 			"hades"
@@ -215,6 +216,7 @@ export default function level1() {
 				sprite("bullet"),
 				pos(player.pos.x, player.pos.y),
 				"bullet",
+				rotate(1),
 				{
 					wDirection: direction
 				},
