@@ -1,7 +1,10 @@
 import k from '../../kaboom.js'
 import findHades from '../utils/findHades.js'
 k.loadSprite("hades", "./src/sprites/friendly/smaller.png")
-k.loadSprite("bullet", "./src/sprites/world/bullet1.png")
+k.loadSprite("bulletRight", "./src/sprites/world/bulletRight.png")
+k.loadSprite("bulletLeft", "./src/sprites/world/bulletLeft.png")
+k.loadSprite("bulletUp", "./src/sprites/world/bulletUp.png")
+k.loadSprite("bulletDown", "./src/sprites/world/bulletDown.png")
 k.loadSprite("enemy", "./src/sprites/enemy/golemSmall.png")
 k.loadSprite("enemy2", "./src/sprites/enemy/enemy2.png")
 k.loadSprite("enemy3", "./src/sprites/enemy/enemy3.png")
@@ -211,16 +214,44 @@ export default function level1() {
 		}
 	
 		function createBullet(direction) {
-	
-			let b = add([
-				sprite("bullet"),
-				pos(player.pos.x, player.pos.y),
-				"bullet",
-				rotate(1),
-				{
-					wDirection: direction
-				},
-			])
+			if(direction == "left"){
+				let b = add([
+					sprite("bulletLeft"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}else if(direction =="right"){
+				let b = add([
+					sprite("bulletRight"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			} else if (direction == "up"){
+				let b = add([
+					sprite("bulletUp"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}else {
+				let b = add([
+					sprite("bulletDown"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}
+			
 	
 	
 		}
