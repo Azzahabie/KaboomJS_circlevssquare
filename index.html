@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>fck</title>
+    <link href="/index.css" rel="stylesheet">
     
-    <script src="./src/main.js" type="module"></script>
+    <script src="/dist/main.js" type="module"></script>
+    <!-- <script src="./src/unbundledMain.js" type="module"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="/index.js"></script>
 </head>
+
 <body>
-    <canvas id="game"></canvas>
+    <div class="hero">
+        <span class="hero-text">CIRCLE VS SQUARE</span>
+    </div>
+    <div class="game-container" id="game-container">
+        <canvas id="game"></canvas>
+    </div>
+    <div class="score-container">
+        <h1 class="top-score">TOP 10 SCORE</h1>
+        <button type="button" id="refreshScore">refresh</button>
+        <div class="table-container">
+            <table class="score-table" id="scoreTable">
+            </table>
+        </div>
+    </div>
+    <div class="findScore-container">
+        <h1 id="findScore-title">Find Your Score</h1>
+        <div class="input-container">
+            <input type="text" placeholder="Enter Username" id="findUserScore">
+            <button type="button" id="findscorebtn">Find Score</button>
+        </div>
+        <div class="table-container">
+            <table class="score-table" id="userScore-table">
+            </table>
+        </div>
+    </div>
     <!-- <script src="./src/main.js" type="module"></script> -->
 </body>
+
 </html>

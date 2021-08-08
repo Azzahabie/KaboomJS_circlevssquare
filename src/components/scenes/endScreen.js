@@ -1,13 +1,14 @@
 import k from '../../kaboom.js'
 
-k.loadSound("died","./src/components/sounds/died.mp3")
-k.loadSound("win","./src/components/sounds/winMusic.mp3")
+k.loadSound("died", "./src/components/sounds/died.mp3")
+k.loadSound("win", "./src/components/sounds/winMusic.mp3")
 
 export default function startScreen() {
-	
-	return (info) =>{
 
+	return (info) => {
 		console.log(info);
+		var gameContainer = document.getElementById("game-container");
+		gameContainer.style.backgroundColor = "black"
 		const {
 			add,
 			pos,
@@ -18,14 +19,10 @@ export default function startScreen() {
 			text,
 			rgba,
 		} = k
-	
-		
 
-
-	
 		const yourScore = add([
 			text(`Score`),
-			pos(345, 360),
+			pos(335, 360),
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
@@ -35,9 +32,9 @@ export default function startScreen() {
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
-		var music 
+		var music
 
-		if(info.outcome){
+		if (info.outcome) {
 			music = play("win")
 			music.play()
 			const outcome = add([
@@ -55,12 +52,11 @@ export default function startScreen() {
 				color(rgba(1, 0.1, 0)),
 				scale(2),
 			]);
-			console.log(music);
 		}
 
 		const restart = add([
-			text(`Press Space To Restart`),
-			pos(215, 460),
+			text(`Press R To Restart`),
+			pos(256, 460),
 			color(rgba(1, 1, 1)),
 			scale(2),
 		]);
@@ -71,14 +67,31 @@ export default function startScreen() {
 			scale(2),
 		]);
 
-		k.keyPress("space", () => {
-			
-		})
-		k.keyPress("enter", () => {
+		k.keyPress("r", () => {
 			music.pause()
 			go("startScreen")
 		})
-	
+		k.keyPress("enter", () => {
+			music.pause()
+			let data = {
+				username : info.theName,
+				score : info.theScore
+			}
+			fetch('https://desolate-citadel-26138.herokuapp.com/updateScore', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data)
+			})
+			.then(()=>{
+				alert("score added")
+				go("startScreen")
+			})
+			.catch(()=>{
+				alert("failed to add score")
+			})		
+		})
 	}
-	
+
 }

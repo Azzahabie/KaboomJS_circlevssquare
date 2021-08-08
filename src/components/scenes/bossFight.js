@@ -1,24 +1,13 @@
 import k from '../../kaboom.js'
-import findHades from '../utils/findHades.js'
 import findNextSector from '../utils/movementGuide.js'
 import shootToSector from '../utils/checkSector.js'
 
-k.loadSprite("hades", "./src/sprites/friendly/hades.png")
-k.loadSprite("bullet", "./src/sprites/world/bullet.png")
-k.loadSprite("enemy", "./src/sprites/enemy/enemy.png")
-k.loadSprite("enemy2", "./src/sprites/enemy/enemy2.png")
-k.loadSprite("enemy3", "./src/sprites/enemy/enemy3.png")
-k.loadSound("shoot", "./src/components/sounds/shoot.wav")
-k.loadSprite("wall", "./src/sprites/world/wall.png")
-k.loadSprite("hello", "./src/sprites/world/longwall.png")
-k.loadSprite("vWall", "./src/sprites/world/vWall.png")
-k.loadSound("hit", "./src/components/sounds/hit.wav")
 k.loadSound("hurt", "./src/components/sounds/explosion.wav")
 k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
 
 export default function bossFight(info) {
 	return (info) => {
-
+		console.log(info);
 		const {
 			add,
 			pos,
@@ -57,7 +46,7 @@ export default function bossFight(info) {
 		const player = add([
 			sprite("hades"),
 			pos(100, 100),
-			scale(2),
+			scale(1),
 			health(info.theHp),
 			solid(),
 			"hades"
@@ -79,16 +68,29 @@ export default function bossFight(info) {
 			color(rgba(1, 1, 1)),
 			scale(2),
 			layer("ui"),
-			
+			"score"
 		]);
-
+		const star = add([
+			sprite("star"),
+			pos(10, 50),
+			scale(0.5),
+			layer("ui"),
+			"star"
+		]);
 		const healthCount = add([
 			text(`${hp}`),
 			pos(50, 100),
-			color(rgba(1, 0, 0.3)),
+			color(rgba(1, 0, 0)),
 			scale(2),
 			layer("ui"),
-			
+			"score"
+		]);
+		const heartIcon = add([
+			sprite("heartIcon"),
+			pos(10, 90),
+			scale(0.5),
+			layer("ui"),
+			"heart"
 		]);
 
 		let boss = add([
@@ -106,7 +108,13 @@ export default function bossFight(info) {
 			return {
 				hurt(n) {
 					hp -= n;
-
+					if (this._tags[0] == "hades") {
+						var gameContainer = document.getElementById("game-container");
+						gameContainer.style.backgroundColor = "red"
+						k.wait(0.2,()=>{
+							gameContainer.style.backgroundColor = "black"
+						})
+					}
 					if (hp <= 0) {
 						if (this._tags[0] == "hades") {
 							theLoop.stop()
@@ -307,12 +315,12 @@ export default function bossFight(info) {
 
 		function loadMap() {
 			let topWall = add([
-				sprite("hello"),
+				sprite("longWall"),
 				solid(),
 				pos(0, -15)
 			])
 			let botWall = add([
-				sprite("hello"),
+				sprite("longWall"),
 				solid(),
 				pos(0, 798)
 			])
@@ -329,15 +337,87 @@ export default function bossFight(info) {
 		}
 
 		function createBullet(direction) {
-			let b = add([
-				sprite("bullet"),
-				pos(player.pos.x, player.pos.y),
-				"bullet",
-				{
-					wDirection: direction
-				},
-			])
+			if(direction == "left"){
+				let b = add([
+					sprite("bulletLeft"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}else if(direction =="right"){
+				let b = add([
+					sprite("bulletRight"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			} else if (direction == "up"){
+				let b = add([
+					sprite("bulletUp"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}else {
+				let b = add([
+					sprite("bulletDown"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}
 			
+	
+	
+		}		function createBullet(direction) {
+			if(direction == "left"){
+				let b = add([
+					sprite("bulletLeft"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}else if(direction =="right"){
+				let b = add([
+					sprite("bulletRight"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			} else if (direction == "up"){
+				let b = add([
+					sprite("bulletUp"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}else {
+				let b = add([
+					sprite("bulletDown"),
+					pos(player.pos.x, player.pos.y),
+					"bullet",
+					{
+						wDirection: direction
+					},
+				])
+			}
+			
+	
+	
 		}
 
 		k.keyPress("s", () => { d = "down" })

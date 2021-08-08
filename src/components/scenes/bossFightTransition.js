@@ -1,23 +1,11 @@
 import k from '../../kaboom.js'
-import bossFightFinalPhase from './bossFightFinalPhase.js'
 
 
-k.loadSprite("hades", "./src/sprites/friendly/hades.png")
-k.loadSprite("bullet", "./src/sprites/world/bullet.png")
-k.loadSprite("enemy", "./src/sprites/enemy/enemy.png")
-k.loadSprite("enemy2", "./src/sprites/enemy/enemy2.png")
-k.loadSprite("enemy3", "./src/sprites/enemy/enemy3.png")
-k.loadSound("shoot", "./src/components/sounds/shoot.wav")
-k.loadSprite("wall", "./src/sprites/world/wall.png")
-k.loadSprite("hello", "./src/sprites/world/longwall.png")
-k.loadSprite("vWall", "./src/sprites/world/vWall.png")
-k.loadSound("hit", "./src/components/sounds/hit.wav")
-k.loadSound("hurt", "./src/components/sounds/explosion.wav")
 k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
 
 export default function bossFight(info) {
 	return (info) => {
-
+		console.log(info);
 		const {
 			add,
 			pos,
@@ -51,7 +39,7 @@ export default function bossFight(info) {
 		const player = add([
 			sprite("hades"),
 			pos(info.hadesPosX, info.hadesPosY),
-			scale(2),
+			scale(1),
 		
 		])
 
