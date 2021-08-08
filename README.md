@@ -6,6 +6,9 @@ This game is created with kaboomJS and bundled with webpack.
 
 Try the game [here](https://www.azzahabie.dev/RPG-game-KaboomJS/)
 
+W A S D to move
+SPACE to shoot
+
 ### Features
 - User movements
 - User gun control
