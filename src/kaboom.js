@@ -5,7 +5,7 @@ export const k = kaboom({
     height:800,
     scale:1,
     fullscreen:false,
-    canvas:document.getElementById("canvas"),
+    canvas:document.getElementById("game"),
     clearColor: [0, 0, 0, 1],
     debug: true
 });

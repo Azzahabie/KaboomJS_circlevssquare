@@ -5,7 +5,7 @@ k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
 
 export default function bossFight(info) {
 	return (info) => {
-
+		console.log(info);
 		const {
 			add,
 			pos,
@@ -39,7 +39,7 @@ export default function bossFight(info) {
 		const player = add([
 			sprite("hades"),
 			pos(info.hadesPosX, info.hadesPosY),
-			scale(2),
+			scale(1),
 		
 		])
 
