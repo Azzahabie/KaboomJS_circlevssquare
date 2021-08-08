@@ -3,7 +3,7 @@ import findNextSector from '../utils/movementGuide.js'
 import shootToSector from '../utils/checkSector.js'
 
 k.loadSound("hurt", "./src/components/sounds/explosion.wav")
-k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
+k.loadSound("firstPhase", "./src/components/sounds/firstphase.mp3")
 
 export default function bossFight(info) {
 	return (info) => {

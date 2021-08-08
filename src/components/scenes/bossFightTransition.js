@@ -1,7 +1,7 @@
 import k from '../../kaboom.js'
 
 
-k.loadSound("firstPhase", "./src/components/sounds/firstPhase.mp3")
+k.loadSound("firstPhase", "./src/components/sounds/firstphase.mp3")
 
 export default function bossFight(info) {
 	return (info) => {
