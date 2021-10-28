@@ -1,6 +1,6 @@
 # Circle VS Square
 Creating an rpg game with kaboomJS for my school work  😊 . Deadline 8 Aug 2021 ✅ 
-
+Checkout the code for the scenes [HERE](https://github.com/Azzahabie/circlevssquare/tree/main/src/components)
 ## The Game
 This game is created with kaboomJS and bundled with webpack.
 
