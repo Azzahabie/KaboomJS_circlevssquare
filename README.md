@@ -4,7 +4,7 @@ Creating an rpg game with kaboomJS for my school work  😊 . Deadline 8 Aug 202
 ## The Game
 This game is created with kaboomJS and bundled with webpack.
 
-Try the game [here](https://www.azzahabie.dev/RPG-game-KaboomJS/)
+Try the game [here](https://www.azzahabie.dev/circlevssquare/)
 
 W A S D to move
 
