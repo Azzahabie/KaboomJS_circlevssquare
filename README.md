@@ -5,7 +5,7 @@ Checkout the code for the scenes [HERE](https://github.com/Azzahabie/circlevssqu
 ## The Game
 This game is created with kaboomJS and bundled with webpack.
 
-Try the game [here](https://www.azzahabie.dev/circlevssquare/)
+Try the game [here](https://www.azzahabie.dev/KaboomJS_circlevssquare/)
 
 W A S D to move
 
